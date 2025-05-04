@@ -1,20 +1,34 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import BottomNav from '../components/BottomNav';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types';
+import BottomNav from '../components/BottomNav'; // adjust if your path is different
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
-
-export default function Home({ navigation }: Props) {
+export default function Home() {
   return (
     <View style={styles.container}>
-      <Text>Home Screen</Text>
-      <BottomNav navigation={navigation} />
+      <View style={styles.content}>
+        <Text style={styles.text}>Home Screen</Text>
+        {/* Your main content goes here */}
+      </View>
+
+      <BottomNav />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  container: {
+    flex: 1,
+    position: 'relative',
+    backgroundColor: '#7864e4',
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 80, // leave space for BottomNav
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
 });
