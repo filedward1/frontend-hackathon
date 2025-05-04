@@ -4,7 +4,9 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 
-export default function BottomNav({ navigation }) {
+import type { NavigationProp } from '@react-navigation/native';
+
+export default function BottomNav({ navigation }: { navigation: NavigationProp<any> }) {
   const routes = [
     { name: 'Home', icon: 'home-outline' },
     { name: 'Explore', icon: 'search-outline' },
