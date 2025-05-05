@@ -7,10 +7,11 @@ import {
   TouchableOpacity, 
   Modal,
   Image,
-  StatusBar
+  StatusBar,
+  ImageBackground
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import BottomNav from '../components/BottomNav'; // Using your existing BottomNav component
+import BottomNav from '../components/BottomNav';
 import { useNavigation } from '@react-navigation/native';
 import * as DocumentPicker from 'expo-document-picker';
 
@@ -28,7 +29,6 @@ export default function Home() {
   const [selectedFile, setSelectedFile] = useState<SelectedFile | null>(null);
   const [editableFileName, setEditableFileName] = useState('');
 
-  // Set greeting based on time of day
   useEffect(() => {
     const hour = new Date().getHours();
     if (hour >= 5 && hour < 12) {
@@ -46,15 +46,13 @@ export default function Home() {
 
   const handleDifficultySelect = (difficulty: 'easy' | 'medium' | 'hard') => {
     setSelectedDifficulty(difficulty);
-    // Additional logic for file selection would go here
   };
 
-  // Function to pick a document
   const pickDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: ['application/pdf', 'text/plain', 'application/msword',
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'], // Specify allowed file types
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
         multiple: false
       });
 
@@ -64,7 +62,7 @@ export default function Home() {
           name: file.name,
           uri: file.uri
         });
-        setEditableFileName(file.name); // Set initial editable name
+        setEditableFileName(file.name);
         console.log('Selected file:', file.name);
       }
     } catch (err) {
@@ -74,24 +72,23 @@ export default function Home() {
 
   const handleFileUpload = () => {
     if (!selectedFile || !selectedDifficulty) {
-      // Show error message
       return;
     }
-    
-    // Here you would upload the file to your backend
-    // and have the LLM generate a quiz based on the content
     
     console.log(`Uploading file: ${selectedFile.name}`);
     console.log(`Selected difficulty: ${selectedDifficulty}`);
     
-    // Close the modal and reset state
     setModalVisible(false);
     setSelectedDifficulty(null);
     setSelectedFile(null);
   };
 
   return (
-    <View style={styles.container}>
+    <ImageBackground 
+      source={require('../assets/BACKGROUND IMAGE 1.png')}
+      style={styles.container}
+      resizeMode="cover"
+    >
       <StatusBar barStyle="dark-content" />
       
       <View style={styles.content}>
@@ -107,9 +104,9 @@ export default function Home() {
           </View>
           <View style={styles.avatarContainer}>
             <Image
-              source={require('../assets/avatar.png')} // Adjust the path as needed
+              source={require('../assets/avatar.png')}
               style={styles.avatar}
-              defaultSource={require('../assets/default-avatar.png')} // Adjust the path as needed
+              defaultSource={require('../assets/default-avatar.png')}
             />
           </View>
         </View>
@@ -123,7 +120,7 @@ export default function Home() {
           <Text style={styles.usernameText}>{username}</Text>
         </View>
 
-        {/* Content Area (Empty white card for now) */}
+        {/* Content Area */}
         <View style={styles.contentCard}>
           {/* Content will go here */}
         </View>
@@ -192,7 +189,6 @@ export default function Home() {
               </Text>
             </TouchableOpacity>
 
-            {/* Add this new file name display box */}
             {selectedFile && (
               <View style={styles.fileNameBox}>
                 <Text style={styles.fileNameLabel}>Quiz Name:</Text>
@@ -229,9 +225,8 @@ export default function Home() {
         </View>
       </Modal>
 
-      {/* Using your existing BottomNav component */}
       <BottomNav />
-    </View>
+    </ImageBackground>
   );
 }
 
@@ -239,20 +234,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: 'relative',
-    backgroundColor: '#7864e4', // Using your background color
   },
   content: {
     flex: 1,
     paddingHorizontal: 16,
     paddingTop: 16,
-    paddingBottom: 80, // leave space for BottomNav as in your original code
+    paddingBottom: 80,
   },
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
-    marginTop: 25, // Add some margin for the status bar
+    marginTop: 25,
   },
   searchBar: {
     flexDirection: 'row',
@@ -312,12 +306,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 16,
-    flex: 1, // Changed from 1 to 0.6 to make it shorter
-    marginBottom: 20, // Add some margin at the bottom
+    flex: 1,
+    marginBottom: 20,
   },
   fab: {
     position: 'absolute',
-    bottom: 110, // Adjusted to position above your taller BottomNav (100px height)
+    bottom: 110,
     alignSelf: 'center',
     width: 56,
     height: 56,
@@ -330,7 +324,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
-    zIndex: 1, // Make sure it appears above other elements
+    zIndex: 1,
   },
   modalContainer: {
     flex: 1,
@@ -357,16 +351,16 @@ const styles = StyleSheet.create({
   difficultyButtons: {
     flexDirection: 'row',
     backgroundColor: '#F0F0F0',
-    borderRadius: 25, // Make it more rounded for pill shape
-    padding: 4, // Add padding inside the container
+    borderRadius: 25,
+    padding: 4,
     marginBottom: 20,
   },
   difficultyButton: {
     flex: 1,
     padding: 12,
     margin: 2,
-    borderRadius: 20, // Rounded corners for pill shape
-    backgroundColor: '#FFFFFF', // White background when not selected
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     elevation: 1,
     shadowColor: '#000',
@@ -375,16 +369,16 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
   },
   selectedButton: {
-    backgroundColor: '#7864e4', // Your theme color when selected
+    backgroundColor: '#7864e4',
     elevation: 2,
     shadowOpacity: 0.3,
   },
   difficultyText: {
     fontWeight: '600',
-    color: '#666', // Darker text for better contrast on white
+    color: '#666',
   },
   selectedText: {
-    color: '#FFFFFF', // White text for selected button
+    color: '#FFFFFF',
   },
   uploadButton: {
     backgroundColor: '#5B45FF',
@@ -436,16 +430,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
     padding: 12,
     borderRadius: 8,
-    marginVertical: 16,  // Add vertical margin
+    marginVertical: 16,
     borderWidth: 1,
     borderColor: '#E0E0E0',
-    width: '100%',  // Ensure full width
-  },
-  fileNameDisplay: {
-    color: '#333',
-    fontSize: 14,
-    textAlign: 'center',
-    fontWeight: '500',
+    width: '100%',
   },
   fileNameLabel: {
     color: '#333',

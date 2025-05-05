@@ -5,6 +5,7 @@ import Home from './app/Home';
 import Explore from './app/Explore';
 import Library from './app/Library';
 import Profile from './app/Profile';
+import Quiz from './app/Quiz';
 import { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -16,7 +17,7 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Explore" component={Explore} />
         <Stack.Screen name="Library" component={Library} />
-        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Profile" component={Quiz} />
       </Stack.Navigator>
     </NavigationContainer>
   );
