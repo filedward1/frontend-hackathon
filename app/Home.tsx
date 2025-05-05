@@ -26,6 +26,7 @@ export default function Home() {
   const [username, setUsername] = useState('Christlei Daniel Aguila');
   const [selectedDifficulty, setSelectedDifficulty] = useState<'easy' | 'medium' | 'hard' | null>(null);
   const [selectedFile, setSelectedFile] = useState<SelectedFile | null>(null);
+  const [editableFileName, setEditableFileName] = useState('');
 
   // Set greeting based on time of day
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function Home() {
           name: file.name,
           uri: file.uri
         });
+        setEditableFileName(file.name); // Set initial editable name
         console.log('Selected file:', file.name);
       }
     } catch (err) {
@@ -186,16 +188,21 @@ export default function Home() {
             
             <TouchableOpacity style={styles.uploadButton} onPress={pickDocument}>
               <Text style={styles.uploadButtonText}>
-                Select File to Upload
+                {selectedFile ? selectedFile.name : 'Select File to Upload'}
               </Text>
             </TouchableOpacity>
 
             {/* Add this new file name display box */}
             {selectedFile && (
               <View style={styles.fileNameBox}>
-                <Text style={styles.fileNameDisplay}>
-                  Quiz Name: {selectedFile.name}
-                </Text>
+                <Text style={styles.fileNameLabel}>Quiz Name:</Text>
+                <TextInput
+                  style={styles.fileNameInput}
+                  value={editableFileName}
+                  onChangeText={setEditableFileName}
+                  placeholder="Enter quiz name"
+                  placeholderTextColor="#999"
+                />
               </View>
             )}
 
@@ -385,10 +392,14 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 16,
+    minWidth: '100%',
   },
   uploadButtonText: {
     color: '#FFF',
     fontWeight: 'bold',
+    textAlign: 'center',
+    paddingHorizontal: 10,
+    flexWrap: 'wrap',
   },
   modalButtonsRow: {
     flexDirection: 'row',
@@ -435,5 +446,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     fontWeight: '500',
+  },
+  fileNameLabel: {
+    color: '#333',
+    fontSize: 14,
+    fontWeight: '500',
+    marginBottom: 8,
+  },
+  fileNameInput: {
+    backgroundColor: '#FFF',
+    borderRadius: 8,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    color: '#333',
+    fontSize: 14,
   },
 });
