@@ -3,4 +3,6 @@ export type RootStackParamList = {
   Explore: undefined;
   Library: undefined;
   Profile: undefined;
+  Result: undefined;
+
 };

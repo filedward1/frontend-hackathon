@@ -11,7 +11,7 @@ export default function BottomNav() {
 
 const routes = [
   { name: 'Home', icon: 'home', activeIcon: 'home' },
-  { name: 'Explore', icon: 'compass', activeIcon: 'compass' },
+  { name: 'Result', icon: 'compass', activeIcon: 'compass' },
   { name: 'Library', icon: 'heart', activeIcon: 'heart' },
   { name: 'Profile', icon: 'person', activeIcon: 'person' },
 ];
@@ -56,6 +56,13 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     overflow: 'hidden',
+    shadowColor: '#062B2D',
+  shadowOffset: {
+    width: 0,
+    height: -10,
+  },
+  shadowOpacity: 0.1,
+  shadowRadius: 40,
   },
   button: {
     alignItems: 'center',
