@@ -6,3 +6,4 @@ type QuizStore = {
     currentQuestionIndex: number;
     addQuestion: (question: Question) => void;
 }
+
