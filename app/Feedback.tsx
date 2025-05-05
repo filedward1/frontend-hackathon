@@ -24,7 +24,7 @@ interface Question {
   module: string;
 }
 
-const module = "Module 5: IT Era"; // Replace with the actual module name if needed
+const module = "Module 5: IT Era";
 
 export default function Feedback({ route }: FeedbackProps) {
   const navigation = useNavigation();
@@ -42,7 +42,7 @@ export default function Feedback({ route }: FeedbackProps) {
   }, [question.question_number, selectedAnswer, submitAnswer]);
 
   const handleNextQuestion = () => {
-    navigation.goBack(); // Or navigate to the next question
+    navigation.goBack(); // Modify this if you'd like to navigate to the next question instead
   };
 
   return (
@@ -53,25 +53,19 @@ export default function Feedback({ route }: FeedbackProps) {
     >
       <StatusBar barStyle="light-content" />
       
-      {/* Header with Back Button */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
-        
         <Text style={styles.moduleTitle}>{module}</Text>
-        
-        {/* Empty view to balance the header */}
         <View style={{ width: 24 }} />
       </View>
 
-      {/* Question Card with Number */}
       <View style={styles.questionCard}>
         <Text style={styles.questionNumber}>QUESTION #{question.question_number}</Text>
         <Text style={styles.questionText}>{question.question}</Text>
       </View>
 
-      {/* Selected Answer Card */}
       <View style={styles.choicesContainer}>
         <View style={[
           styles.selectedAnswerCard,
@@ -82,29 +76,27 @@ export default function Feedback({ route }: FeedbackProps) {
         </View>
       </View>
 
-      {/* Feedback Card */}
       <View style={styles.feedbackCard}>
         <Text style={styles.feedbackTitle}>Feedback</Text>
-        
+
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>You Answered:</Text>
           <Text style={styles.feedbackText}>{selectedAnswer}. {question.choices[selectedAnswer]}</Text>
         </View>
-        
+
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>Correct Answer:</Text>
           <Text style={styles.feedbackText}>
             {question.correct_answer}. {question.choices[question.correct_answer]}
           </Text>
         </View>
-        
+
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>Explanation:</Text>
           <Text style={styles.feedbackText}>{question.explanation}</Text>
         </View>
       </View>
 
-      {/* Next Question Button */}
       <View style={styles.submitButtonContainer}>
         <TouchableOpacity 
           style={styles.submitButton} 
@@ -170,17 +162,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   selectedAnswerCard: {
-    backgroundColor: 'rgba(106, 90, 224, 0.8)', // 80% opacity for correct answer
+    backgroundColor: 'rgba(106, 90, 224, 0.8)',
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: 'rgba(106, 90, 224, 0.5)', // 50% opacity border
+    borderColor: 'rgba(106, 90, 224, 0.5)',
   },
   incorrectAnswerCard: {
-    backgroundColor: 'rgba(255, 0, 0, 0.8)', // 80% opacity for incorrect answer
-    borderColor: 'rgba(255, 0, 0, 0.5)', // 50% opacity border
+    backgroundColor: 'rgba(255, 0, 0, 0.8)',
+    borderColor: 'rgba(255, 0, 0, 0.5)',
   },
   choiceLetter: {
     fontWeight: 'bold',

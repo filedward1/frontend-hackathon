@@ -50,7 +50,7 @@ export default function Quiz5() {
   };
 
   const module = "Module 5: IT Era"; // Replace with the actual module name if needed
-  const letters = ["A", "B", "C", "D"];
+  const letters = ["A", "B", "C", "D"]; // fil
 
   const handleSubmit = () => {
     if (selectedAnswer && currentQuestion) {
