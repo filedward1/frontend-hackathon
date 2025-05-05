@@ -1,4 +1,4 @@
-class Question {
+export class Question {
   private questionId: number = 0;
   private question: string = "";
   private choices: string[] = [];
