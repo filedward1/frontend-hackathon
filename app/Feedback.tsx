@@ -34,12 +34,12 @@ export default function Feedback({ route }: FeedbackProps) {
     userAnswers: state.userAnswers,
   }));
 
+  const questionArray = useQuizStore((state) => state.questionArray);
+  const currentQuestion = questionArray[0]; // Get the first question from the store
+
   const isCorrect = userAnswers[question.question_number]?.isCorrect;
 
-  useEffect(() => {
-    // Submit the answer when the component mounts
-    submitAnswer(question.question_number, selectedAnswer);
-  }, [question.question_number, selectedAnswer, submitAnswer]);
+
 
   const handleNextQuestion = () => {
     navigation.goBack(); // Or navigate to the next question
@@ -67,8 +67,8 @@ export default function Feedback({ route }: FeedbackProps) {
 
       {/* Question Card with Number */}
       <View style={styles.questionCard}>
-        <Text style={styles.questionNumber}>QUESTION #{question.question_number}</Text>
-        <Text style={styles.questionText}>{question.question}</Text>
+        <Text style={styles.questionNumber}>QUESTION # 1</Text>
+        <Text style={styles.questionText}>What is one of the capabilities of Internet of Things (IoT)?</Text>
       </View>
 
       {/* Selected Answer Card */}
@@ -77,8 +77,8 @@ export default function Feedback({ route }: FeedbackProps) {
           styles.selectedAnswerCard,
           isCorrect === false && styles.incorrectAnswerCard
         ]}>
-          <Text style={styles.choiceLetter}>{selectedAnswer}.</Text>
-          <Text style={styles.choiceText}>{question.choices[selectedAnswer]}</Text>
+          <Text style={styles.choiceLetter}>B.</Text>
+          <Text style={styles.choiceText}>It can be used to improve business processes, such as manufacturing and production.</Text>
         </View>
       </View>
 
@@ -88,19 +88,19 @@ export default function Feedback({ route }: FeedbackProps) {
         
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>You Answered:</Text>
-          <Text style={styles.feedbackText}>{selectedAnswer}. {question.choices[selectedAnswer]}</Text>
+          <Text style={styles.feedbackText}>B.</Text>
         </View>
         
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>Correct Answer:</Text>
           <Text style={styles.feedbackText}>
-            {question.correct_answer}. {question.choices[question.correct_answer]}
+           B. It can be used to improve business processes, such as manufacturing and production.
           </Text>
         </View>
         
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>Explanation:</Text>
-          <Text style={styles.feedbackText}>{question.explanation}</Text>
+          <Text style={styles.feedbackText}>IoT can be used to improve business processes, such as manufacturing and production, through the use of sensors.</Text>
         </View>
       </View>
 
