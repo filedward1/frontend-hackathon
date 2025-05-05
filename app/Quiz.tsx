@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, StatusBar, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -37,12 +37,12 @@ export default function Quiz() {
   };
 
   const handleSubmit = () => {
-    // if (selectedAnswer) {
+    if (selectedAnswer) {
     //   navigation.navigate('Feedback', {
     //     question: currentQuestion,
     //     selectedAnswer: selectedAnswer
     //   });
-    // }
+    }
   };
 
   return (
@@ -51,12 +51,12 @@ export default function Quiz() {
       style={styles.container}
       resizeMode="cover"
     >
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
       
       {/* Header with Back Button */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#5B45FF" />
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
         
         <Text style={styles.moduleTitle}>{currentQuestion.module}</Text>
@@ -65,12 +65,13 @@ export default function Quiz() {
         <View style={{ width: 24 }} />
       </View>
 
-      {/* Question Card */}
+      {/* Question Card with Number */}
       <View style={styles.questionCard}>
+        <Text style={styles.questionNumber}>QUESTION #{currentQuestion.question_number}</Text>
         <Text style={styles.questionText}>{currentQuestion.question}</Text>
       </View>
 
-      {/* Choices with Spacing */}
+      {/* Choices Container */}
       <View style={styles.choicesContainer}>
         {Object.entries(currentQuestion.choices).map(([key, value]) => (
           <TouchableOpacity
@@ -87,17 +88,19 @@ export default function Quiz() {
         ))}
       </View>
 
-      {/* Submit Button (Fixed at Bottom) */}
-      <TouchableOpacity 
-        style={[
-          styles.submitButton,
-          !selectedAnswer && styles.disabledButton
-        ]} 
-        onPress={handleSubmit}
-        disabled={!selectedAnswer}
-      >
-        <Text style={styles.submitButtonText}>Submit Answer</Text>
-      </TouchableOpacity>
+      {/* Submit Button */}
+      <View style={styles.submitButtonContainer}>
+        <TouchableOpacity 
+          style={[
+            styles.submitButton,
+            !selectedAnswer && styles.disabledButton
+          ]} 
+          onPress={handleSubmit}
+          disabled={!selectedAnswer}
+        >
+          <Text style={styles.submitButtonText}>Submit Answer</Text>
+        </TouchableOpacity>
+      </View>
     </ImageBackground>
   );
 }
@@ -112,36 +115,48 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 20,
+    paddingTop: Platform.OS === 'ios' ? 50 : 30,
+    paddingBottom: 16,
+  },
+  backButton: {
+    padding: 8,
   },
   moduleTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#5B45FF',
+    color: '#FFFFFF',
     textAlign: 'center',
   },
   questionCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 20,
     marginHorizontal: 20,
-    marginBottom: 24,
+    marginTop: 8,
+    marginBottom: 16, // Space before choices
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowRadius: 6,
+    elevation: 5,
+  },
+  questionNumber: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#6A5AE0',
+    textAlign: 'center',
+    marginBottom: 12,
   },
   questionText: {
     fontSize: 16,
     fontWeight: '600',
     color: '#333',
     lineHeight: 24,
+    textAlign: 'center',
   },
   choicesContainer: {
+    flex: 1,
     paddingHorizontal: 20,
-    marginBottom: 80, // Space for submit button
   },
   choiceCard: {
     backgroundColor: '#FFFFFF',
@@ -158,12 +173,12 @@ const styles = StyleSheet.create({
   },
   selectedChoice: {
     borderWidth: 2,
-    borderColor: '#5B45FF',
+    borderColor: '#6A5AE0',
     backgroundColor: '#F0F0FF',
   },
   choiceLetter: {
     fontWeight: 'bold',
-    color: '#5B45FF',
+    color: '#6A5AE0',
     marginRight: 12,
     fontSize: 16,
     minWidth: 20,
@@ -174,19 +189,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
   },
+  submitButtonContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    paddingTop: 12,
+    backgroundColor: 'transparent',
+  },
   submitButton: {
-    position: 'absolute',
-    bottom: 20,
-    left: 20,
-    right: 20,
-    backgroundColor: '#5B45FF',
-    padding: 16,
-    borderRadius: 12,
+    backgroundColor: '#6A5AE0',
+    paddingVertical: 16,
+    borderRadius: 30,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowRadius: 8,
     elevation: 5,
   },
   disabledButton: {
