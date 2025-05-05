@@ -131,8 +131,7 @@ const styles = StyleSheet.create({
       borderRadius: 16,
       padding: 24,
       marginHorizontal: 20,
-      marginTop: 8,
-      marginBottom: 8, // Reduced space between question and choices
+      marginVertical: 34,
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.1,
@@ -167,10 +166,10 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
+      shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 2,
+      shadowRadius: 6,
+      elevation: 5,
     },
     selectedChoice: {
       borderWidth: 2,
