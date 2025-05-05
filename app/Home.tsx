@@ -10,14 +10,8 @@ import {
   StatusBar,
   ImageBackground
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import BottomNav from '../components/BottomNav';
-import { useNavigation } from '@react-navigation/native';
-import * as DocumentPicker from 'expo-document-picker';
-  StatusBar,
-} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import BottomNav from "../components/BottomNav"; // Using your existing BottomNav component
 import { useNavigation } from "@react-navigation/native";
 import * as DocumentPicker from "expo-document-picker";
 import { initializeQuiz } from "../core/store";
