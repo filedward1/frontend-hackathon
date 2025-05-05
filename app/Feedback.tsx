@@ -39,10 +39,7 @@ export default function Feedback({ route }: FeedbackProps) {
 
   const isCorrect = userAnswers[question.question_number]?.isCorrect;
 
-  useEffect(() => {
-    // Submit the answer when the component mounts
-    submitAnswer(currentQuestion.getQuestionId(), selectedAnswer);
-  }, [question.question_number, selectedAnswer, submitAnswer]);
+
 
   const handleNextQuestion = () => {
     navigation.goBack(); // Or navigate to the next question
