@@ -106,112 +106,113 @@ export default function Quiz() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    position: 'relative',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: Platform.OS === 'ios' ? 50 : 30,
-    paddingBottom: 16,
-  },
-  backButton: {
-    padding: 8,
-  },
-  moduleTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    textAlign: 'center',
-  },
-  questionCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 20,
-    marginHorizontal: 20,
-    marginTop: 8,
-    marginBottom: 16, // Space before choices
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 5,
-  },
-  questionNumber: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#6A5AE0',
-    textAlign: 'center',
-    marginBottom: 12,
-  },
-  questionText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  choicesContainer: {
-    flex: 1,
-    paddingHorizontal: 20,
-  },
-  choiceCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  selectedChoice: {
-    borderWidth: 2,
-    borderColor: '#6A5AE0',
-    backgroundColor: '#F0F0FF',
-  },
-  choiceLetter: {
-    fontWeight: 'bold',
-    color: '#6A5AE0',
-    marginRight: 12,
-    fontSize: 16,
-    minWidth: 20,
-  },
-  choiceText: {
-    flex: 1,
-    color: '#333',
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  submitButtonContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-    paddingTop: 12,
-    backgroundColor: 'transparent',
-  },
-  submitButton: {
-    backgroundColor: '#6A5AE0',
-    paddingVertical: 16,
-    borderRadius: 30,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  disabledButton: {
-    backgroundColor: '#CCCCCC',
-  },
-  submitButtonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-});
+    container: {
+      flex: 1,
+      position: 'relative',
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 20,
+      paddingTop: Platform.OS === 'ios' ? 50 : 30,
+      paddingBottom: 16,
+    },
+    backButton: {
+      padding: 8,
+    },
+    moduleTitle: {
+      fontSize: 18,
+      color: '#FFFFFF',
+      textAlign: 'center',
+    },
+    questionCard: {
+      backgroundColor: '#FFFFFF',
+      borderRadius: 16,
+      padding: 24,
+      marginHorizontal: 20,
+      marginTop: 8,
+      marginBottom: 8, // Reduced space between question and choices
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.1,
+      shadowRadius: 6,
+      elevation: 5,
+    },
+    questionNumber: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: '#0C092A',
+      textAlign: 'center',
+      marginBottom: 12,
+    },
+    questionText: {
+      fontSize: 18, // Increased font size
+      fontWeight: '600',
+      color: '#0C092A', // Changed to dark blue
+      lineHeight: 26,
+      textAlign: 'center',
+    },
+    choicesContainer: {
+      flex: 1,
+      paddingHorizontal: 20,
+      justifyContent: 'flex-end',
+      paddingBottom: 12, // Bring choices closer to submit button
+    },
+    choiceCard: {
+      backgroundColor: '#FFFFFF',
+      borderRadius: 12,
+      padding: 16,
+      marginBottom: 12,
+      flexDirection: 'row',
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    selectedChoice: {
+      borderWidth: 2,
+      borderColor: '#6A5AE0',
+      backgroundColor: '#F0F0FF',
+    },
+    choiceLetter: {
+      fontWeight: 'bold',
+      color: '#6A5AE0',
+      marginRight: 12,
+      fontSize: 16,
+      minWidth: 20,
+    },
+    choiceText: {
+      flex: 1,
+      color: '#0C092A', // Changed to dark blue
+      fontSize: 15,
+      lineHeight: 22,
+    },
+    submitButtonContainer: {
+      paddingHorizontal: 20,
+      paddingBottom: 20,
+      paddingTop: 12,
+      backgroundColor: 'transparent',
+    },
+    submitButton: {
+      backgroundColor: '#6A5AE0',
+      paddingVertical: 16,
+      borderRadius: 30,
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.2,
+      shadowRadius: 8,
+      elevation: 5,
+    },
+    disabledButton: {
+      backgroundColor: '#CCCCCC',
+    },
+    submitButtonText: {
+      color: '#FFF',
+      fontWeight: 'bold',
+      fontSize: 16,
+    },
+  });
