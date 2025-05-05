@@ -4,8 +4,12 @@ import { Question } from "../core/question";
 type QuizStore = {
   questionArray: Question[];
   currentQuestionIndex: number;
-  userAnswers: Record<number, string>;
+  userAnswers: Record<number, {
+    selectedAnswer: string;
+    isCorrect: boolean;
+  }>;
   score: number;
+  totalAnswered: number;
 
   addQuestion: (question: Question) => void;
   addQuestions: (questions: Question[]) => void;
@@ -13,7 +17,7 @@ type QuizStore = {
   nextQuestion: () => void;
   previousQuestion: () => void;
   submitAnswer: (questionId: number, answer: string) => void;
-  calculateScore: () => void;
+  calculateScore: () => number;
   resetQuiz: () => void;
 };
 
@@ -22,6 +26,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
   currentQuestionIndex: 0,
   userAnswers: {},
   score: 0,
+  totalAnswered: 0,
 
   // Add a single question
   addQuestion: (question: Question) =>
@@ -58,40 +63,64 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     }),
 
   submitAnswer: (questionId: number, answer: string) =>
-    set((state) => ({
-      userAnswers: {
-        ...state.userAnswers,
-        [questionId]: answer,
-      },
-    })),
-
-  calculateScore: () =>
     set((state) => {
-      const { questionArray, userAnswers } = state;
+      // Find the question with the matching ID
+      const question = state.questionArray.find(q => q.getQuestionId() === questionId);
+      
+      if (!question) {
+        return state; // Return unchanged state if question not found
+      }
+      
+      // Compare user's answer with correct answer
+      const correctAnswer = question.getCorrectAnswer();
+      const isCorrect = answer === correctAnswer;
+      
+      // Update user answers with new answer data
+      const updatedUserAnswers = {
+        ...state.userAnswers,
+        [questionId]: {
+          selectedAnswer: answer,
+          isCorrect: isCorrect
+        }
+      };
+      
+      // Count total correct answers
       let correctCount = 0;
-
-      questionArray.forEach((question) => {
-        const questionId = question.getQuestionId();
-        const userAnswer = userAnswers[questionId];
-
-        if (userAnswer && userAnswer === question.getCorrectAnswer()) {
+      let answeredCount = 0;
+      
+      Object.values(updatedUserAnswers).forEach(answerData => {
+        answeredCount++;
+        if (answerData.isCorrect) {
           correctCount++;
         }
       });
-
-      const score =
-        questionArray.length > 0
-          ? (correctCount / questionArray.length) * 100
+      
+      // Calculate new score as percentage
+      const updatedScore = 
+        answeredCount > 0
+          ? (correctCount / state.questionArray.length) * 100
           : 0;
-
-      return { score };
+      
+      // Return updated state with new score
+      return {
+        userAnswers: updatedUserAnswers,
+        score: updatedScore,
+        totalAnswered: answeredCount
+      };
     }),
+
+  calculateScore: () => {
+    // This now returns the current score without recalculating
+    // since score is updated with every answer submission
+    return get().score;
+  },
 
   resetQuiz: () =>
     set({
       currentQuestionIndex: 0,
       userAnswers: {},
       score: 0,
+      totalAnswered: 0,
     }),
 }));
 

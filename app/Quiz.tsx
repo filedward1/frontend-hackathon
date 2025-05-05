@@ -27,7 +27,7 @@ export default function Quiz() {
   const navigation = useNavigation();
   const questionArray = useQuizStore((state) => state.questionArray);
 
-  const currentQuestion = questionArray.length > 0 ? questionArray[1] : null;
+  const currentQuestion = questionArray.length > 0 ? questionArray[0] : null;
   // const [currentQuestion] = useState<Question>({
   //   question_number: 1,
   //   question: "What is one of the capabilities of Internet of Things (IoT)?",
