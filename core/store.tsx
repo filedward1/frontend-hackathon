@@ -106,6 +106,5 @@ export const initializeQuiz = (quizData: any) => {
     );
   });
 
-
   useQuizStore.getState().addQuestions(questionArray);
 };
