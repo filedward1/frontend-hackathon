@@ -24,7 +24,7 @@ interface Question {
   module: string;
 }
 
-const module = "Module 5: IT Era";
+const module = "Module 5: IT Era"; // Replace with the actual module name if needed
 
 export default function Feedback({ route }: FeedbackProps) {
   const navigation = useNavigation();
@@ -34,15 +34,18 @@ export default function Feedback({ route }: FeedbackProps) {
     userAnswers: state.userAnswers,
   }));
 
+  const questionArray = useQuizStore((state) => state.questionArray);
+  const currentQuestion = questionArray[0]; // Get the first question from the store
+
   const isCorrect = userAnswers[question.question_number]?.isCorrect;
 
   useEffect(() => {
     // Submit the answer when the component mounts
-    submitAnswer(question.question_number, selectedAnswer);
+    submitAnswer(currentQuestion.getQuestionId(), selectedAnswer);
   }, [question.question_number, selectedAnswer, submitAnswer]);
 
   const handleNextQuestion = () => {
-    navigation.goBack(); // Modify this if you'd like to navigate to the next question instead
+    navigation.goBack(); // Or navigate to the next question
   };
 
   return (
@@ -53,50 +56,58 @@ export default function Feedback({ route }: FeedbackProps) {
     >
       <StatusBar barStyle="light-content" />
       
+      {/* Header with Back Button */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
+        
         <Text style={styles.moduleTitle}>{module}</Text>
+        
+        {/* Empty view to balance the header */}
         <View style={{ width: 24 }} />
       </View>
 
+      {/* Question Card with Number */}
       <View style={styles.questionCard}>
-        <Text style={styles.questionNumber}>QUESTION #{question.question_number}</Text>
-        <Text style={styles.questionText}>{question.question}</Text>
+        <Text style={styles.questionNumber}>QUESTION # 1</Text>
+        <Text style={styles.questionText}>What is one of the capabilities of Internet of Things (IoT)?</Text>
       </View>
 
+      {/* Selected Answer Card */}
       <View style={styles.choicesContainer}>
         <View style={[
           styles.selectedAnswerCard,
           isCorrect === false && styles.incorrectAnswerCard
         ]}>
-          <Text style={styles.choiceLetter}>{selectedAnswer}.</Text>
-          <Text style={styles.choiceText}>{question.choices[selectedAnswer]}</Text>
+          <Text style={styles.choiceLetter}>B.</Text>
+          <Text style={styles.choiceText}>It can be used to improve business processes, such as manufacturing and production.</Text>
         </View>
       </View>
 
+      {/* Feedback Card */}
       <View style={styles.feedbackCard}>
         <Text style={styles.feedbackTitle}>Feedback</Text>
-
+        
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>You Answered:</Text>
-          <Text style={styles.feedbackText}>{selectedAnswer}. {question.choices[selectedAnswer]}</Text>
+          <Text style={styles.feedbackText}>B.</Text>
         </View>
-
+        
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>Correct Answer:</Text>
           <Text style={styles.feedbackText}>
-            {question.correct_answer}. {question.choices[question.correct_answer]}
+           B. It can be used to improve business processes, such as manufacturing and production.
           </Text>
         </View>
-
+        
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>Explanation:</Text>
-          <Text style={styles.feedbackText}>{question.explanation}</Text>
+          <Text style={styles.feedbackText}>IoT can be used to improve business processes, such as manufacturing and production, through the use of sensors.</Text>
         </View>
       </View>
 
+      {/* Next Question Button */}
       <View style={styles.submitButtonContainer}>
         <TouchableOpacity 
           style={styles.submitButton} 
@@ -162,17 +173,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   selectedAnswerCard: {
-    backgroundColor: 'rgba(106, 90, 224, 0.8)',
+    backgroundColor: 'rgba(106, 90, 224, 0.8)', // 80% opacity for correct answer
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: 'rgba(106, 90, 224, 0.5)',
+    borderColor: 'rgba(106, 90, 224, 0.5)', // 50% opacity border
   },
   incorrectAnswerCard: {
-    backgroundColor: 'rgba(255, 0, 0, 0.8)',
-    borderColor: 'rgba(255, 0, 0, 0.5)',
+    backgroundColor: 'rgba(255, 0, 0, 0.8)', // 80% opacity for incorrect answer
+    borderColor: 'rgba(255, 0, 0, 0.5)', // 50% opacity border
   },
   choiceLetter: {
     fontWeight: 'bold',
