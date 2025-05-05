@@ -53,13 +53,12 @@ export default function Quiz() {
   const letters = ["A", "B", "C", "D"];
 
   const handleSubmit = () => {
-    if (selectedAnswer) {
-    //   navigation.navigate('Feedback', {
-    //     question: currentQuestion,
-    //     selectedAnswer: selectedAnswer,
-    //   });
+    if (selectedAnswer && currentQuestion) {
+      useQuizStore.getState().submitAnswer(currentQuestion.getQuestionId(), selectedAnswer);
+      navigation.navigate("Feedback");
     }
   };
+  
 
   return (
     <ImageBackground

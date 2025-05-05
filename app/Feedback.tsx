@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, StatusBar, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useQuizStore } from "../core/store";
 
 interface FeedbackProps {
   route: {
@@ -23,13 +24,25 @@ interface Question {
   module: string;
 }
 
+const module = "Module 5: IT Era"; // Replace with the actual module name if needed
+
 export default function Feedback({ route }: FeedbackProps) {
   const navigation = useNavigation();
   const { question, selectedAnswer } = route.params;
-  const isCorrect = selectedAnswer === question.correct_answer;
+  const { submitAnswer, userAnswers } = useQuizStore((state) => ({
+    submitAnswer: state.submitAnswer,
+    userAnswers: state.userAnswers,
+  }));
+
+  const isCorrect = userAnswers[question.question_number]?.isCorrect;
+
+  useEffect(() => {
+    // Submit the answer when the component mounts
+    submitAnswer(question.question_number, selectedAnswer);
+  }, [question.question_number, selectedAnswer, submitAnswer]);
 
   const handleNextQuestion = () => {
-    navigation.goBack(); // Or navigate to next question
+    navigation.goBack(); // Or navigate to the next question
   };
 
   return (
@@ -46,7 +59,7 @@ export default function Feedback({ route }: FeedbackProps) {
           <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
         
-        <Text style={styles.moduleTitle}>{question.module}</Text>
+        <Text style={styles.moduleTitle}>{module}</Text>
         
         {/* Empty view to balance the header */}
         <View style={{ width: 24 }} />
@@ -62,7 +75,7 @@ export default function Feedback({ route }: FeedbackProps) {
       <View style={styles.choicesContainer}>
         <View style={[
           styles.selectedAnswerCard,
-          !isCorrect && styles.incorrectAnswerCard
+          isCorrect === false && styles.incorrectAnswerCard
         ]}>
           <Text style={styles.choiceLetter}>{selectedAnswer}.</Text>
           <Text style={styles.choiceText}>{question.choices[selectedAnswer]}</Text>

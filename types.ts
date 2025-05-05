@@ -15,8 +15,5 @@ export type RootStackParamList = {
   Library: undefined;
   Profile: undefined;
   Quiz: undefined;
-  Feedback: {
-    question: Question;
-    selectedAnswer: string;
-  };
+  Feedback: undefined
 };
