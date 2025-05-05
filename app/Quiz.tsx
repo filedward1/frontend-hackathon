@@ -9,8 +9,9 @@ import {
   Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useQuizStore } from "../core/store";
+import { RootStackParamList } from "../types";
 
 interface Question {
   question_number: number;
@@ -25,19 +26,22 @@ interface Question {
 
 export default function Quiz() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const [currentQuestion] = useState<Question>({
-    question_number: 1,
-    question: "What is one of the capabilities of Internet of Things (IoT)?",
-    choices: {
-      "A": "It can be used for traffic management in smart cities",
-      "B": "It can be used to improve business processes, such as manufacturing and production",
-      "C": "It provides analytics to help organizations in their decision-making",
-      "D": "It is capable of providing security services for IoT devices"
-    },
-    correct_answer: "B",
-    explanation: "IoT can be used to improve business processes, such as manufacturing and production, through the use of sensors.",
-    module: "Module 5: IT Era"
-  });
+  const questionArray = useQuizStore((state) => state.questionArray);
+  const currentQuestion = questionArray[0]; // Get the first question from the store
+
+//   const [currentQuestion] = useState<Question>({
+//     question_number: 1,
+//     question: "What is one of the capabilities of Internet of Things (IoT)?",
+//     choices: {
+//       "A": "It can be used for traffic management in smart cities",
+//       "B": "It can be used to improve business processes, such as manufacturing and production",
+//       "C": "It provides analytics to help organizations in their decision-making",
+//       "D": "It is capable of providing security services for IoT devices"
+//     },
+//     correct_answer: "B",
+//     explanation: "IoT can be used to improve business processes, such as manufacturing and production, through the use of sensors.",
+//     module: "Module 5: IT Era"
+//   });
 
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
 
@@ -50,10 +54,10 @@ export default function Quiz() {
 
   const handleSubmit = () => {
     if (selectedAnswer) {
-      navigation.navigate('Feedback', {
-        question: currentQuestion,
-        selectedAnswer: selectedAnswer,
-      });
+    //   navigation.navigate('Feedback', {
+    //     question: currentQuestion,
+    //     selectedAnswer: selectedAnswer,
+    //   });
     }
   };
 
