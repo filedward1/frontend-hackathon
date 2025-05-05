@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  View, 
-  Text, 
-  TextInput, 
-  StyleSheet, 
-  TouchableOpacity, 
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
   Modal,
   Image,
-  StatusBar
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import BottomNav from '../components/BottomNav'; // Using your existing BottomNav component
-import { useNavigation } from '@react-navigation/native';
+  StatusBar,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import BottomNav from "../components/BottomNav"; // Using your existing BottomNav component
+import { useNavigation } from "@react-navigation/native";
+import * as DocumentPicker from "expo-document-picker";
 
 interface SelectedFile {
   name: string;
@@ -20,21 +21,24 @@ interface SelectedFile {
 
 export default function Home() {
   const navigation = useNavigation();
-  const [greeting, setGreeting] = useState('');
+  const [greeting, setGreeting] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const [username, setUsername] = useState('Christlei Daniel Aguila');
-  const [selectedDifficulty, setSelectedDifficulty] = useState<'easy' | 'medium' | 'hard' | null>(null);
+  const [username, setUsername] = useState("Christlei Daniel Aguila");
+  const [selectedDifficulty, setSelectedDifficulty] = useState<
+    "easy" | "medium" | "hard" | null
+  >(null);
   const [selectedFile, setSelectedFile] = useState<SelectedFile | null>(null);
+  const [editableFileName, setEditableFileName] = useState("");
 
   // Set greeting based on time of day
   useEffect(() => {
     const hour = new Date().getHours();
     if (hour >= 5 && hour < 12) {
-      setGreeting('GOOD MORNING');
+      setGreeting("GOOD MORNING");
     } else if (hour >= 12 && hour < 18) {
-      setGreeting('GOOD AFTERNOON');
+      setGreeting("GOOD AFTERNOON");
     } else {
-      setGreeting('GOOD EVENING');
+      setGreeting("GOOD EVENING");
     }
   }, []);
 
@@ -42,7 +46,7 @@ export default function Home() {
     setModalVisible(true);
   };
 
-  const handleDifficultySelect = (difficulty: 'easy' | 'medium' | 'hard') => {
+  const handleDifficultySelect = (difficulty: "easy" | "medium" | "hard") => {
     setSelectedDifficulty(difficulty);
     // Additional logic for file selection would go here
   };
@@ -50,15 +54,27 @@ export default function Home() {
   // Function to pick a document
   const pickDocument = async () => {
     try {
-      // For now, just simulate a successful file selection
-      console.log("Document picked");
-      const file: SelectedFile = {
-        name: "Module 5_IT Era",
-        uri: "file://sample/path"
-      };
-      setSelectedFile(file);
+      const result = await DocumentPicker.getDocumentAsync({
+        type: [
+          "application/pdf",
+          "text/plain",
+          "application/msword",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ], // Specify allowed file types
+        multiple: false,
+      });
+
+      if (result.assets && result.assets.length > 0) {
+        const file = result.assets[0];
+        setSelectedFile({
+          name: file.name,
+          uri: file.uri,
+        });
+        setEditableFileName(file.name); // Set initial editable name
+        console.log("Selected file:", file.name);
+      }
     } catch (err) {
-      console.log('Document picking failed', err);
+      console.log("Document picking failed:", err);
     }
   };
 
@@ -67,13 +83,13 @@ export default function Home() {
       // Show error message
       return;
     }
-    
+
     // Here you would upload the file to your backend
     // and have the LLM generate a quiz based on the content
-    
+
     console.log(`Uploading file: ${selectedFile.name}`);
     console.log(`Selected difficulty: ${selectedDifficulty}`);
-    
+
     // Close the modal and reset state
     setModalVisible(false);
     setSelectedDifficulty(null);
@@ -83,12 +99,17 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      
+
       <View style={styles.content}>
         {/* Search and Avatar Row */}
         <View style={styles.headerRow}>
           <View style={styles.searchBar}>
-            <Ionicons name="search" size={20} color="#888" style={styles.searchIcon} />
+            <Ionicons
+              name="search"
+              size={20}
+              color="#888"
+              style={styles.searchIcon}
+            />
             <TextInput
               style={styles.searchInput}
               placeholder="Search"
@@ -97,9 +118,9 @@ export default function Home() {
           </View>
           <View style={styles.avatarContainer}>
             <Image
-              source={require('../assets/avatar.png')} // Adjust the path as needed
+              source={require("../assets/avatar.png")} // Adjust the path as needed
               style={styles.avatar}
-              defaultSource={require('../assets/default-avatar.png')} // Adjust the path as needed
+              defaultSource={require("../assets/default-avatar.png")} // Adjust the path as needed
             />
           </View>
         </View>
@@ -114,9 +135,7 @@ export default function Home() {
         </View>
 
         {/* Content Area (Empty white card for now) */}
-        <View style={styles.contentCard}>
-          {/* Content will go here */}
-        </View>
+        <View style={styles.contentCard}>{/* Content will go here */}</View>
       </View>
 
       {/* Floating Action Button */}
@@ -134,42 +153,66 @@ export default function Home() {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Select Difficulty</Text>
-            
+
             <View style={styles.difficultyButtons}>
               <TouchableOpacity
                 style={[
                   styles.difficultyButton,
-                  selectedDifficulty === 'easy' && styles.selectedButton
+                  selectedDifficulty === "easy" && styles.selectedButton,
                 ]}
-                onPress={() => handleDifficultySelect('easy')}
+                onPress={() => handleDifficultySelect("easy")}
               >
-                <Text style={styles.difficultyText}>Easy</Text>
+                <Text
+                  style={[
+                    styles.difficultyText,
+                    selectedDifficulty === "easy" && styles.selectedText,
+                  ]}
+                >
+                  Easy
+                </Text>
               </TouchableOpacity>
-              
+
               <TouchableOpacity
                 style={[
                   styles.difficultyButton,
-                  selectedDifficulty === 'medium' && styles.selectedButton
+                  selectedDifficulty === "medium" && styles.selectedButton,
                 ]}
-                onPress={() => handleDifficultySelect('medium')}
+                onPress={() => handleDifficultySelect("medium")}
               >
-                <Text style={styles.difficultyText}>Medium</Text>
+                <Text
+                  style={[
+                    styles.difficultyText,
+                    selectedDifficulty === "medium" && styles.selectedText,
+                  ]}
+                >
+                  Medium
+                </Text>
               </TouchableOpacity>
-              
+
               <TouchableOpacity
                 style={[
                   styles.difficultyButton,
-                  selectedDifficulty === 'hard' && styles.selectedButton
+                  selectedDifficulty === "hard" && styles.selectedButton,
                 ]}
-                onPress={() => handleDifficultySelect('hard')}
+                onPress={() => handleDifficultySelect("hard")}
               >
-                <Text style={styles.difficultyText}>Hard</Text>
+                <Text
+                  style={[
+                    styles.difficultyText,
+                    selectedDifficulty === "hard" && styles.selectedText,
+                  ]}
+                >
+                  Hard
+                </Text>
               </TouchableOpacity>
             </View>
-            
-            <TouchableOpacity style={styles.uploadButton} onPress={pickDocument}>
+
+            <TouchableOpacity
+              style={styles.uploadButton}
+              onPress={pickDocument}
+            >
               <Text style={styles.uploadButtonText}>
-                Select File to Upload
+                {selectedFile ? selectedFile.name : "Select File to Upload"}
               </Text>
             </TouchableOpacity>
 
@@ -189,11 +232,11 @@ export default function Home() {
               >
                 <Text style={styles.cancelButtonText}>Cancel</Text>
               </TouchableOpacity>
-              
+
               <TouchableOpacity
                 style={[
                   styles.submitButton,
-                  !selectedDifficulty && styles.disabledButton
+                  !selectedDifficulty && styles.disabledButton,
                 ]}
                 onPress={handleFileUpload}
                 disabled={!selectedDifficulty}
@@ -214,8 +257,8 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative',
-    backgroundColor: '#7864e4', // Using your background color
+    position: "relative",
+    backgroundColor: "#7864e4", // Using your background color
   },
   content: {
     flex: 1,
@@ -224,16 +267,16 @@ const styles = StyleSheet.create({
     paddingBottom: 80, // leave space for BottomNav as in your original code
   },
   headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 16,
     marginTop: 25, // Add some margin for the status bar
   },
   searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
     borderRadius: 20,
     paddingHorizontal: 12,
     flex: 1,
@@ -246,16 +289,16 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 40,
-    color: '#333',
+    color: "#333",
   },
   avatarContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#2A4CFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    overflow: 'hidden',
+    backgroundColor: "#2A4CFF",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
   },
   avatar: {
     width: 40,
@@ -263,46 +306,46 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   greetingCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
   },
   greetingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 4,
   },
   greetingText: {
     fontSize: 12,
-    fontWeight: '600',
-    color: '#777',
+    fontWeight: "600",
+    color: "#777",
     marginLeft: 6,
   },
   usernameText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
   },
   contentCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     borderRadius: 16,
     padding: 16,
     flex: 1, // Changed from 1 to 0.6 to make it shorter
     marginBottom: 20, // Add some margin at the bottom
   },
   fab: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 110, // Adjusted to position above your taller BottomNav (100px height)
-    alignSelf: 'center',
+    alignSelf: "center",
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#5B45FF',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#5B45FF",
+    justifyContent: "center",
+    alignItems: "center",
     elevation: 5,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
@@ -310,15 +353,15 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     padding: 20,
   },
   modalContent: {
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     borderRadius: 16,
     padding: 20,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
@@ -326,89 +369,116 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
   difficultyButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    backgroundColor: "#F0F0F0",
+    borderRadius: 25, // Make it more rounded for pill shape
+    padding: 4, // Add padding inside the container
     marginBottom: 20,
   },
   difficultyButton: {
     flex: 1,
     padding: 12,
-    margin: 5,
-    borderRadius: 8,
-    backgroundColor: '#F0F0F0',
-    alignItems: 'center',
+    margin: 2,
+    borderRadius: 20, // Rounded corners for pill shape
+    backgroundColor: "#FFFFFF", // White background when not selected
+    alignItems: "center",
+    elevation: 1,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
   },
   selectedButton: {
-    backgroundColor: '#7864e4', // Match your app's theme color
-  },
-  fileNameText: {
-    marginTop: 5,
-    fontSize: 12,
-    color: '#666',
+    backgroundColor: "#7864e4", // Your theme color when selected
+    elevation: 2,
+    shadowOpacity: 0.3,
   },
   difficultyText: {
-    fontWeight: '600',
+    fontWeight: "600",
+    color: "#666", // Darker text for better contrast on white
+  },
+  selectedText: {
+    color: "#FFFFFF", // White text for selected button
   },
   uploadButton: {
-    backgroundColor: '#5B45FF',
+    backgroundColor: "#5B45FF",
     padding: 14,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 16,
+    minWidth: "100%",
   },
   uploadButtonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
+    color: "#FFF",
+    fontWeight: "bold",
+    textAlign: "center",
+    paddingHorizontal: 10,
+    flexWrap: "wrap",
   },
   modalButtonsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   cancelButton: {
     flex: 1,
     padding: 14,
     marginRight: 8,
     borderRadius: 8,
-    backgroundColor: '#F0F0F0',
-    alignItems: 'center',
+    backgroundColor: "#F0F0F0",
+    alignItems: "center",
   },
   submitButton: {
     flex: 1,
     padding: 14,
     marginLeft: 8,
     borderRadius: 8,
-    backgroundColor: '#5B45FF',
-    alignItems: 'center',
+    backgroundColor: "#5B45FF",
+    alignItems: "center",
   },
   disabledButton: {
-    backgroundColor: '#CCCCCC',
+    backgroundColor: "#CCCCCC",
   },
   cancelButtonText: {
-    color: '#333',
-    fontWeight: 'bold',
+    color: "#333",
+    fontWeight: "bold",
   },
   submitButtonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
+    color: "#FFF",
+    fontWeight: "bold",
   },
   fileNameBox: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     padding: 12,
     borderRadius: 8,
-    marginVertical: 16,  // Add vertical margin
+    marginVertical: 16, // Add vertical margin
     borderWidth: 1,
-    borderColor: '#E0E0E0',
-    width: '100%',  // Ensure full width
+    borderColor: "#E0E0E0",
+    width: "100%", // Ensure full width
   },
   fileNameDisplay: {
-    color: '#333',
+    color: "#333",
     fontSize: 14,
-    textAlign: 'center',
-    fontWeight: '500',
+    textAlign: "center",
+    fontWeight: "500",
+  },
+  fileNameLabel: {
+    color: "#333",
+    fontSize: 14,
+    fontWeight: "500",
+    marginBottom: 8,
+  },
+  fileNameInput: {
+    backgroundColor: "#FFF",
+    borderRadius: 8,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    color: "#333",
+    fontSize: 14,
   },
 });
