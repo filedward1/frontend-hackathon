@@ -93,7 +93,7 @@ export default function Quiz() {
       {/* Choices Container */}
       <View style={styles.choicesContainer}>
         {(currentQuestion?.getChoices() || []).map((value, index) => {
-          const key = letters[index]; // A, B, C, D
+          const key = letters[index]; 
           return (
             <TouchableOpacity
               key={key}
