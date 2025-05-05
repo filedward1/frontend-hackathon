@@ -13,6 +13,8 @@ import { Ionicons } from "@expo/vector-icons";
 import BottomNav from "../components/BottomNav"; // Using your existing BottomNav component
 import { useNavigation } from "@react-navigation/native";
 import * as DocumentPicker from "expo-document-picker";
+import { initializeQuiz } from "../core/store";
+import { quizData } from "../core/sampleData";
 
 interface SelectedFile {
   name: string;
@@ -79,18 +81,8 @@ export default function Home() {
   };
 
   const handleFileUpload = () => {
-    if (!selectedFile || !selectedDifficulty) {
-      // Show error message
-      return;
-    }
-
-    // Here you would upload the file to your backend
-    // and have the LLM generate a quiz based on the content
-
-    console.log(`Uploading file: ${selectedFile.name}`);
-    console.log(`Selected difficulty: ${selectedDifficulty}`);
-
-    // Close the modal and reset state
+    initializeQuiz(quizData); // initialize the quiz with the selected file and difficulty
+    console.log("-----Quiz initialized with data:", quizData);
     setModalVisible(false);
     setSelectedDifficulty(null);
     setSelectedFile(null);

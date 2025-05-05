@@ -1,6 +1,6 @@
 import { Question } from "./question";
 
-const quizData = {
+export const quizData = {
   quiz: [
     {
       question_number: 1,
