@@ -219,9 +219,14 @@ export default function Home() {
             {/* Add this new file name display box */}
             {selectedFile && (
               <View style={styles.fileNameBox}>
-                <Text style={styles.fileNameDisplay}>
-                  Quiz Name: {selectedFile.name}
-                </Text>
+                <Text style={styles.fileNameLabel}>Quiz Name:</Text>
+                <TextInput
+                  style={styles.fileNameInput}
+                  value={editableFileName}
+                  onChangeText={setEditableFileName}
+                  placeholder="Enter quiz name"
+                  placeholderTextColor="#999"
+                />
               </View>
             )}
 
