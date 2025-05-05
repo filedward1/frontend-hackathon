@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, StatusBar, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { useQuizStore } from '../core/store';
+import { RootStackParamList } from '../types'; // Adjust the path if needed
 
 
 
@@ -18,7 +19,7 @@ interface Question {
 }
 
 export default function Quiz() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [currentQuestion] = useState<Question>({
     question_number: 1,
     question: "What is one of the capabilities of Internet of Things (IoT)?",
@@ -41,10 +42,10 @@ export default function Quiz() {
 
   const handleSubmit = () => {
     if (selectedAnswer) {
-    //   navigation.navigate('Feedback', {
-    //     question: currentQuestion,
-    //     selectedAnswer: selectedAnswer
-    //   });
+      navigation.navigate('Feedback', {
+        question: currentQuestion,
+        selectedAnswer: selectedAnswer,
+      });
     }
   };
 
