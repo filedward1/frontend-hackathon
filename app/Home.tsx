@@ -23,7 +23,7 @@ interface SelectedFile {
 }
 
 export default function Home() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const [greeting, setGreeting] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [username, setUsername] = useState("Christlei Daniel Aguila");
@@ -84,6 +84,8 @@ export default function Home() {
     setModalVisible(false);
     setSelectedDifficulty(null);
     setSelectedFile(null);
+
+    navigation.navigate("Quiz");
   };
 
   return (

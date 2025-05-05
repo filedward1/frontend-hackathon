@@ -18,6 +18,7 @@ export default function App() {
         <Stack.Screen name="Explore" component={Explore} />
         <Stack.Screen name="Library" component={Library} />
         <Stack.Screen name="Profile" component={Quiz} />
+        <Stack.Screen name="Quiz" component={Quiz} />
       </Stack.Navigator>
     </NavigationContainer>
   );

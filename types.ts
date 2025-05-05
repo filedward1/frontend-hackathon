@@ -3,4 +3,5 @@ export type RootStackParamList = {
   Explore: undefined;
   Library: undefined;
   Profile: undefined;
+  Quiz: undefined;
 };

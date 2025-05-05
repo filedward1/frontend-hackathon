@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, StatusBar, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useQuizStore } from '../core/store';
+
+
 
 interface Question {
   question_number: number;
