@@ -1,0 +1,414 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  View, 
+  Text, 
+  TextInput, 
+  StyleSheet, 
+  TouchableOpacity, 
+  Modal,
+  Image,
+  StatusBar
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import BottomNav from '../components/BottomNav'; // Using your existing BottomNav component
+import { useNavigation } from '@react-navigation/native';
+
+interface SelectedFile {
+  name: string;
+  uri: string;
+}
+
+export default function Home() {
+  const navigation = useNavigation();
+  const [greeting, setGreeting] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [username, setUsername] = useState('Christlei Daniel Aguila');
+  const [selectedDifficulty, setSelectedDifficulty] = useState<'easy' | 'medium' | 'hard' | null>(null);
+  const [selectedFile, setSelectedFile] = useState<SelectedFile | null>(null);
+
+  // Set greeting based on time of day
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) {
+      setGreeting('GOOD MORNING');
+    } else if (hour >= 12 && hour < 18) {
+      setGreeting('GOOD AFTERNOON');
+    } else {
+      setGreeting('GOOD EVENING');
+    }
+  }, []);
+
+  const openFileUploadModal = () => {
+    setModalVisible(true);
+  };
+
+  const handleDifficultySelect = (difficulty: 'easy' | 'medium' | 'hard') => {
+    setSelectedDifficulty(difficulty);
+    // Additional logic for file selection would go here
+  };
+
+  // Function to pick a document
+  const pickDocument = async () => {
+    try {
+      // For now, just simulate a successful file selection
+      console.log("Document picked");
+      const file: SelectedFile = {
+        name: "Module 5_IT Era",
+        uri: "file://sample/path"
+      };
+      setSelectedFile(file);
+    } catch (err) {
+      console.log('Document picking failed', err);
+    }
+  };
+
+  const handleFileUpload = () => {
+    if (!selectedFile || !selectedDifficulty) {
+      // Show error message
+      return;
+    }
+    
+    // Here you would upload the file to your backend
+    // and have the LLM generate a quiz based on the content
+    
+    console.log(`Uploading file: ${selectedFile.name}`);
+    console.log(`Selected difficulty: ${selectedDifficulty}`);
+    
+    // Close the modal and reset state
+    setModalVisible(false);
+    setSelectedDifficulty(null);
+    setSelectedFile(null);
+  };
+
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+      
+      <View style={styles.content}>
+        {/* Search and Avatar Row */}
+        <View style={styles.headerRow}>
+          <View style={styles.searchBar}>
+            <Ionicons name="search" size={20} color="#888" style={styles.searchIcon} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search"
+              placeholderTextColor="#888"
+            />
+          </View>
+          <View style={styles.avatarContainer}>
+            <Image
+              source={require('../assets/avatar.png')} // Adjust the path as needed
+              style={styles.avatar}
+              defaultSource={require('../assets/default-avatar.png')} // Adjust the path as needed
+            />
+          </View>
+        </View>
+
+        {/* Greeting Card */}
+        <View style={styles.greetingCard}>
+          <View style={styles.greetingRow}>
+            <Ionicons name="sunny" size={24} color="#FFD700" />
+            <Text style={styles.greetingText}>{greeting}</Text>
+          </View>
+          <Text style={styles.usernameText}>{username}</Text>
+        </View>
+
+        {/* Content Area (Empty white card for now) */}
+        <View style={styles.contentCard}>
+          {/* Content will go here */}
+        </View>
+      </View>
+
+      {/* Floating Action Button */}
+      <TouchableOpacity style={styles.fab} onPress={openFileUploadModal}>
+        <Ionicons name="add" size={30} color="#FFF" />
+      </TouchableOpacity>
+
+      {/* File Upload Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Select Difficulty</Text>
+            
+            <View style={styles.difficultyButtons}>
+              <TouchableOpacity
+                style={[
+                  styles.difficultyButton,
+                  selectedDifficulty === 'easy' && styles.selectedButton
+                ]}
+                onPress={() => handleDifficultySelect('easy')}
+              >
+                <Text style={styles.difficultyText}>Easy</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+                style={[
+                  styles.difficultyButton,
+                  selectedDifficulty === 'medium' && styles.selectedButton
+                ]}
+                onPress={() => handleDifficultySelect('medium')}
+              >
+                <Text style={styles.difficultyText}>Medium</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+                style={[
+                  styles.difficultyButton,
+                  selectedDifficulty === 'hard' && styles.selectedButton
+                ]}
+                onPress={() => handleDifficultySelect('hard')}
+              >
+                <Text style={styles.difficultyText}>Hard</Text>
+              </TouchableOpacity>
+            </View>
+            
+            <TouchableOpacity style={styles.uploadButton} onPress={pickDocument}>
+              <Text style={styles.uploadButtonText}>
+                Select File to Upload
+              </Text>
+            </TouchableOpacity>
+
+            {/* Add this new file name display box */}
+            {selectedFile && (
+              <View style={styles.fileNameBox}>
+                <Text style={styles.fileNameDisplay}>
+                  Quiz Name: {selectedFile.name}
+                </Text>
+              </View>
+            )}
+
+            <View style={styles.modalButtonsRow}>
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+                style={[
+                  styles.submitButton,
+                  !selectedDifficulty && styles.disabledButton
+                ]}
+                onPress={handleFileUpload}
+                disabled={!selectedDifficulty}
+              >
+                <Text style={styles.submitButtonText}>Submit</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Using your existing BottomNav component */}
+      <BottomNav />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    position: 'relative',
+    backgroundColor: '#7864e4', // Using your background color
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 80, // leave space for BottomNav as in your original code
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    marginTop: 25, // Add some margin for the status bar
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    flex: 1,
+    marginRight: 12,
+    height: 40,
+  },
+  searchIcon: {
+    marginRight: 6,
+  },
+  searchInput: {
+    flex: 1,
+    height: 40,
+    color: '#333',
+  },
+  avatarContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#2A4CFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
+  greetingCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
+  },
+  greetingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  greetingText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#777',
+    marginLeft: 6,
+  },
+  usernameText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  contentCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 16,
+    flex: 1, // Changed from 1 to 0.6 to make it shorter
+    marginBottom: 20, // Add some margin at the bottom
+  },
+  fab: {
+    position: 'absolute',
+    bottom: 110, // Adjusted to position above your taller BottomNav (100px height)
+    alignSelf: 'center',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#5B45FF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    zIndex: 1, // Make sure it appears above other elements
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: '#FFF',
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  difficultyButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  difficultyButton: {
+    flex: 1,
+    padding: 12,
+    margin: 5,
+    borderRadius: 8,
+    backgroundColor: '#F0F0F0',
+    alignItems: 'center',
+  },
+  selectedButton: {
+    backgroundColor: '#7864e4', // Match your app's theme color
+  },
+  fileNameText: {
+    marginTop: 5,
+    fontSize: 12,
+    color: '#666',
+  },
+  difficultyText: {
+    fontWeight: '600',
+  },
+  uploadButton: {
+    backgroundColor: '#5B45FF',
+    padding: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  uploadButtonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+  },
+  modalButtonsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  cancelButton: {
+    flex: 1,
+    padding: 14,
+    marginRight: 8,
+    borderRadius: 8,
+    backgroundColor: '#F0F0F0',
+    alignItems: 'center',
+  },
+  submitButton: {
+    flex: 1,
+    padding: 14,
+    marginLeft: 8,
+    borderRadius: 8,
+    backgroundColor: '#5B45FF',
+    alignItems: 'center',
+  },
+  disabledButton: {
+    backgroundColor: '#CCCCCC',
+  },
+  cancelButtonText: {
+    color: '#333',
+    fontWeight: 'bold',
+  },
+  submitButtonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+  },
+  fileNameBox: {
+    backgroundColor: '#F5F5F5',
+    padding: 12,
+    borderRadius: 8,
+    marginVertical: 16,  // Add vertical margin
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    width: '100%',  // Ensure full width
+  },
+  fileNameDisplay: {
+    color: '#333',
+    fontSize: 14,
+    textAlign: 'center',
+    fontWeight: '500',
+  },
+});
