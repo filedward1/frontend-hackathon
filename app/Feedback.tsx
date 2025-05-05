@@ -26,23 +26,8 @@ interface Question {
 
 const module = "Module 5: IT Era"; // Replace with the actual module name if needed
 
-export default function Feedback({ route }: FeedbackProps) {
+export default function Feedback() {
   const navigation = useNavigation();
-  const { question, selectedAnswer } = route.params;
-  const { submitAnswer, userAnswers } = useQuizStore((state) => ({
-    submitAnswer: state.submitAnswer,
-    userAnswers: state.userAnswers,
-  }));
-
-  const questionArray = useQuizStore((state) => state.questionArray);
-  const currentQuestion = questionArray[0]; // Get the first question from the store
-
-  const isCorrect = userAnswers[question.question_number]?.isCorrect;
-
-  useEffect(() => {
-    // Submit the answer when the component mounts
-    submitAnswer(currentQuestion.getQuestionId(), selectedAnswer);
-  }, [question.question_number, selectedAnswer, submitAnswer]);
 
   const handleNextQuestion = () => {
     navigation.goBack(); // Or navigate to the next question
@@ -78,7 +63,7 @@ export default function Feedback({ route }: FeedbackProps) {
       <View style={styles.choicesContainer}>
         <View style={[
           styles.selectedAnswerCard,
-          isCorrect === false && styles.incorrectAnswerCard
+          styles.incorrectAnswerCard
         ]}>
           <Text style={styles.choiceLetter}>B.</Text>
           <Text style={styles.choiceText}>It can be used to improve business processes, such as manufacturing and production.</Text>
