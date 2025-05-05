@@ -24,7 +24,7 @@ const routes = [
         return (
           <TouchableOpacity
             key={name}
-            onPress={() => navigation.navigate(name as keyof RootStackParamList)}
+            onPress={() => navigation.navigate({ name } as any)}
             style={styles.button}
           >
             <Ionicons

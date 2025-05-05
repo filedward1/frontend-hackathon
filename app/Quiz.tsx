@@ -24,23 +24,20 @@ interface Question {
 }
 
 export default function Quiz() {
-  const navigation = useNavigation();
-  const questionArray = useQuizStore((state) => state.questionArray);
-
-  const currentQuestion = questionArray.length > 0 ? questionArray[0] : null;
-  // const [currentQuestion] = useState<Question>({
-  //   question_number: 1,
-  //   question: "What is one of the capabilities of Internet of Things (IoT)?",
-  //   choices: {
-  //     "A": "It can be used for traffic management in smart cities",
-  //     "B": "It can be used to improve business processes, such as manufacturing and production",
-  //     "C": "It provides analytics to help organizations in their decision-making",
-  //     "D": "It is capable of providing security services for IoT devices"
-  //   },
-  //   correct_answer: "B",
-  //   explanation: "IoT can be used to improve business processes, such as manufacturing and production, through the use of sensors.",
-  //   module: "Module 5: IT Era"
-  // });
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [currentQuestion] = useState<Question>({
+    question_number: 1,
+    question: "What is one of the capabilities of Internet of Things (IoT)?",
+    choices: {
+      "A": "It can be used for traffic management in smart cities",
+      "B": "It can be used to improve business processes, such as manufacturing and production",
+      "C": "It provides analytics to help organizations in their decision-making",
+      "D": "It is capable of providing security services for IoT devices"
+    },
+    correct_answer: "B",
+    explanation: "IoT can be used to improve business processes, such as manufacturing and production, through the use of sensors.",
+    module: "Module 5: IT Era"
+  });
 
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
 
@@ -53,10 +50,10 @@ export default function Quiz() {
 
   const handleSubmit = () => {
     if (selectedAnswer) {
-      //   navigation.navigate('Feedback', {
-      //     question: currentQuestion,
-      //     selectedAnswer: selectedAnswer
-      //   });
+      navigation.navigate('Feedback', {
+        question: currentQuestion,
+        selectedAnswer: selectedAnswer,
+      });
     }
   };
 
