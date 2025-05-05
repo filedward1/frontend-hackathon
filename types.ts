@@ -4,5 +4,6 @@ export type RootStackParamList = {
   Library: undefined;
   Profile: undefined;
   Quiz: undefined;
-  Feedback: undefined
+  Feedback: undefined;
+  Result: undefined;
 };
