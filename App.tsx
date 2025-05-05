@@ -6,6 +6,7 @@ import Explore from './app/Explore';
 import Library from './app/Library';
 import Profile from './app/Profile';
 import Quiz from './app/Quiz';
+import Result from './app/Result';
 import { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -18,6 +19,7 @@ export default function App() {
         <Stack.Screen name="Explore" component={Explore} />
         <Stack.Screen name="Library" component={Library} />
         <Stack.Screen name="Profile" component={Quiz} />
+        <Stack.Screen name="Result" component={Result} />
       </Stack.Navigator>
     </NavigationContainer>
   );
