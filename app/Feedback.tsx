@@ -30,7 +30,7 @@ export default function Feedback() {
   const navigation = useNavigation();
 
   const handleNextQuestion = () => {
-    navigation.goBack(); // Or navigate to the next question
+    navigation.navigate("Result" as never); // Or navigate to the next question
   };
 
   return (
@@ -65,8 +65,8 @@ export default function Feedback() {
           styles.selectedAnswerCard,
           styles.incorrectAnswerCard
         ]}>
-          <Text style={styles.choiceLetter}>B.</Text>
-          <Text style={styles.choiceText}>It can be used to improve business processes, such as manufacturing and production.</Text>
+          <Text style={styles.choiceLetter}>C.</Text>
+          <Text style={styles.choiceText}>It provides analytics to help organizations in their decision-making.</Text>
         </View>
       </View>
 
@@ -76,7 +76,7 @@ export default function Feedback() {
         
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>You Answered:</Text>
-          <Text style={styles.feedbackText}>B.</Text>
+          <Text style={styles.feedbackText}>C.</Text>
         </View>
         
         <View style={styles.feedbackItem}>
@@ -98,7 +98,7 @@ export default function Feedback() {
           style={styles.submitButton} 
           onPress={handleNextQuestion}
         >
-          <Text style={styles.submitButtonText}>Next Question</Text>
+          <Text style={styles.submitButtonText}>View Score</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>

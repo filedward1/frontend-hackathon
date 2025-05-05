@@ -38,13 +38,9 @@ export default function Result() {
   };
 
   const handleSubmit = () => {
-    if (selectedAnswer) {
-    //   navigation.navigate('Feedback', {
-    //     question: currentQuestion,
-    //     selectedAnswer: selectedAnswer
-    //   });
-    }
-  };
+    // Handle the submission logic here
+    navigation.navigate("Home" as never); // Navigate to the Home screen
+  }
 
   return (
     <ImageBackground 
@@ -86,11 +82,11 @@ export default function Result() {
       {/* 3️⃣ Middle View (purple container) */}
       <View style={styles.middleWrapper}>
       <Text style={styles.statusText}>
-    You have answered 3/5 questions correctly! Awesome!
+    You have answered 1/5 questions correctly! Awesome!
   </Text>
       </View>
       <View style={styles.submitButtonContainer}>
-    <TouchableOpacity style={styles.submitButton}>
+    <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
     <Text style={styles.submitButtonText}>Back to Home</Text>
   </TouchableOpacity>
 </View>

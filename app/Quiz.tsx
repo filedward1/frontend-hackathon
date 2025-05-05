@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
   choicesContainer: {
     flex: 1,
     paddingHorizontal: 20,
+    justifyContent: "flex-end",
   },
   choiceCard: {
     backgroundColor: "#FFFFFF",
