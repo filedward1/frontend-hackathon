@@ -6,7 +6,7 @@ export default function Library() {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.text}>Library Screen</Text>
+        <Text style={styles.text}>Library Screen </Text>
       </View>
       <BottomNav />
     </View>
