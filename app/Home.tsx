@@ -12,6 +12,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import BottomNav from '../components/BottomNav'; // Using your existing BottomNav component
 import { useNavigation } from '@react-navigation/native';
+import * as DocumentPicker from 'expo-document-picker';
 
 interface SelectedFile {
   name: string;
@@ -25,6 +26,7 @@ export default function Home() {
   const [username, setUsername] = useState('Christlei Daniel Aguila');
   const [selectedDifficulty, setSelectedDifficulty] = useState<'easy' | 'medium' | 'hard' | null>(null);
   const [selectedFile, setSelectedFile] = useState<SelectedFile | null>(null);
+  const [editableFileName, setEditableFileName] = useState('');
 
   // Set greeting based on time of day
   useEffect(() => {
@@ -50,15 +52,23 @@ export default function Home() {
   // Function to pick a document
   const pickDocument = async () => {
     try {
-      // For now, just simulate a successful file selection
-      console.log("Document picked");
-      const file: SelectedFile = {
-        name: "Module 5_IT Era",
-        uri: "file://sample/path"
-      };
-      setSelectedFile(file);
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ['application/pdf', 'text/plain', 'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'], // Specify allowed file types
+        multiple: false
+      });
+
+      if (result.assets && result.assets.length > 0) {
+        const file = result.assets[0];
+        setSelectedFile({
+          name: file.name,
+          uri: file.uri
+        });
+        setEditableFileName(file.name); // Set initial editable name
+        console.log('Selected file:', file.name);
+      }
     } catch (err) {
-      console.log('Document picking failed', err);
+      console.log('Document picking failed:', err);
     }
   };
 
@@ -143,7 +153,10 @@ export default function Home() {
                 ]}
                 onPress={() => handleDifficultySelect('easy')}
               >
-                <Text style={styles.difficultyText}>Easy</Text>
+                <Text style={[
+                  styles.difficultyText,
+                  selectedDifficulty === 'easy' && styles.selectedText
+                ]}>Easy</Text>
               </TouchableOpacity>
               
               <TouchableOpacity
@@ -153,7 +166,10 @@ export default function Home() {
                 ]}
                 onPress={() => handleDifficultySelect('medium')}
               >
-                <Text style={styles.difficultyText}>Medium</Text>
+                <Text style={[
+                  styles.difficultyText,
+                  selectedDifficulty === 'medium' && styles.selectedText
+                ]}>Medium</Text>
               </TouchableOpacity>
               
               <TouchableOpacity
@@ -163,22 +179,30 @@ export default function Home() {
                 ]}
                 onPress={() => handleDifficultySelect('hard')}
               >
-                <Text style={styles.difficultyText}>Hard</Text>
+                <Text style={[
+                  styles.difficultyText,
+                  selectedDifficulty === 'hard' && styles.selectedText
+                ]}>Hard</Text>
               </TouchableOpacity>
             </View>
             
             <TouchableOpacity style={styles.uploadButton} onPress={pickDocument}>
               <Text style={styles.uploadButtonText}>
-                Select File to Upload
+                {selectedFile ? selectedFile.name : 'Select File to Upload'}
               </Text>
             </TouchableOpacity>
 
             {/* Add this new file name display box */}
             {selectedFile && (
               <View style={styles.fileNameBox}>
-                <Text style={styles.fileNameDisplay}>
-                  Quiz Name: {selectedFile.name}
-                </Text>
+                <Text style={styles.fileNameLabel}>Quiz Name:</Text>
+                <TextInput
+                  style={styles.fileNameInput}
+                  value={editableFileName}
+                  onChangeText={setEditableFileName}
+                  placeholder="Enter quiz name"
+                  placeholderTextColor="#999"
+                />
               </View>
             )}
 
@@ -332,27 +356,35 @@ const styles = StyleSheet.create({
   },
   difficultyButtons: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    backgroundColor: '#F0F0F0',
+    borderRadius: 25, // Make it more rounded for pill shape
+    padding: 4, // Add padding inside the container
     marginBottom: 20,
   },
   difficultyButton: {
     flex: 1,
     padding: 12,
-    margin: 5,
-    borderRadius: 8,
-    backgroundColor: '#F0F0F0',
+    margin: 2,
+    borderRadius: 20, // Rounded corners for pill shape
+    backgroundColor: '#FFFFFF', // White background when not selected
     alignItems: 'center',
+    elevation: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
   },
   selectedButton: {
-    backgroundColor: '#7864e4', // Match your app's theme color
-  },
-  fileNameText: {
-    marginTop: 5,
-    fontSize: 12,
-    color: '#666',
+    backgroundColor: '#7864e4', // Your theme color when selected
+    elevation: 2,
+    shadowOpacity: 0.3,
   },
   difficultyText: {
     fontWeight: '600',
+    color: '#666', // Darker text for better contrast on white
+  },
+  selectedText: {
+    color: '#FFFFFF', // White text for selected button
   },
   uploadButton: {
     backgroundColor: '#5B45FF',
@@ -360,10 +392,14 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 16,
+    minWidth: '100%',
   },
   uploadButtonText: {
     color: '#FFF',
     fontWeight: 'bold',
+    textAlign: 'center',
+    paddingHorizontal: 10,
+    flexWrap: 'wrap',
   },
   modalButtonsRow: {
     flexDirection: 'row',
@@ -410,5 +446,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     fontWeight: '500',
+  },
+  fileNameLabel: {
+    color: '#333',
+    fontSize: 14,
+    fontWeight: '500',
+    marginBottom: 8,
+  },
+  fileNameInput: {
+    backgroundColor: '#FFF',
+    borderRadius: 8,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    color: '#333',
+    fontSize: 14,
   },
 });
