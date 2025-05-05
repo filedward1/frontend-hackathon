@@ -132,7 +132,11 @@ export default function Home() {
 
         {/* Content Area */}
         <View style={styles.contentCard}>
-          {/* Content will go here */}
+          <Image
+            source={require('../assets/image_logo.png')} // Replace with your image path
+            style={styles.centerImage}
+            resizeMode="contain"
+          />
         </View>
       </View>
 
@@ -265,6 +269,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 80,
+    marginTop: 20,
+    marginHorizontal: 13,
   },
   headerRow: {
     flexDirection: "row",
@@ -285,29 +291,30 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     marginRight: 6,
+    marginTop: 1,
   },
   searchInput: {
     flex: 1,
-    height: 40,
+    height: 30,
     color: "#333",
   },
   avatarContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 50,
+    height: 50,
+    borderRadius: 30,
     backgroundColor: "#2A4CFF",
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
   },
   avatar: {
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
     borderRadius: 20,
   },
   greetingCard: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 16,
     marginBottom: 16,
   },
@@ -329,10 +336,12 @@ const styles = StyleSheet.create({
   },
   contentCard: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 16,
-    flex: 1,
-    marginBottom: 20,
+    flex: .9,
+    marginBottom: 16,
+    alignItems: 'center', // Center the image horizontally
+    justifyContent: 'center', // Center the image vertically
   },
   fab: {
     position: 'absolute',
@@ -474,5 +483,10 @@ const styles = StyleSheet.create({
     borderColor: "#E0E0E0",
     color: "#333",
     fontSize: 14,
+  },
+  centerImage: {
+    width: '100%',
+    height: '100%',
+    alignSelf: 'center',
   },
 });
